@@ -21,6 +21,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.myTextView);
         tv.setMovementMethod(new ScrollingMovementMethod());
+        Https_async https =  new Https_async(this,tv);
+        https.execute();
     }
 
     @Override

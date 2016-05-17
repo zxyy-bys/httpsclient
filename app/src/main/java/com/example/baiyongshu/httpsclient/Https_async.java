@@ -3,6 +3,7 @@ package com.example.baiyongshu.httpsclient;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.widget.TextView;
 
 
@@ -179,52 +180,101 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
          //   httpclient.close();
         }
         */
-        HttpClient httpClient = getNewHttpClient();
+        //https client
+        /*
+        for(int i = 0; i <30 ;++i) {
+            HttpClient httpClient = getNewHttpClient();
 
-        URI uri;
-        try {
-            uri = new URI("https://192.168.1.107");
-        } catch (URISyntaxException e1) {
-            System.out.println("error");
-            return false;
-        }
-
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        HttpHost host = new HttpHost(uri.getHost(), 443, uri.getScheme());
-        HttpPost httppost = new HttpPost(uri.getPath());
-
-        try {
-            long startTime = System.currentTimeMillis();
-            System.out.println("start Time: " + formatter.format(startTime));
-            HttpResponse response = httpClient.execute(host, httppost);
-            if(response == null){
-                System.out.println("response null");
+            URI uri;
+            try {
+                uri = new URI("http://149.125.82.188/files/file_500K_1");
+            } catch (URISyntaxException e1) {
+                System.out.println("error");
                 return false;
             }
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                            response.getEntity().getContent()
-                    )
-            );
-            long beforeRead = System.currentTimeMillis();
-            System.out.println("read Start: " + formatter.format(beforeRead));
-            String line = null;
-            while ((line = reader.readLine()) != null){
-                total += line + "\n";
-            }
 
-            long endTime = System.currentTimeMillis();
-            System.out.println("end Time: " + formatter.format(endTime));
-            this.elapsedTime = endTime - startTime;
-            System.out.println(elapsedTime);
-           //System.out.println(result);
-        } catch (ClientProtocolException e) {
-            System.out.println("error1");
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("error2");
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            HttpHost host = new HttpHost(uri.getHost(), 80, uri.getScheme());
+            HttpPost httppost = new HttpPost(uri.getPath());
+
+            try {
+                long startTime = System.currentTimeMillis();
+                System.out.println("start Time: " + formatter.format(startTime));
+                HttpResponse response = httpClient.execute(host, httppost);
+                if (response == null) {
+                    System.out.println("response null");
+                    return false;
+                }
+
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(
+                                response.getEntity().getContent()
+                        )
+                );
+                long beforeRead = System.currentTimeMillis();
+                System.out.println("read Start: " + formatter.format(beforeRead));
+                String line;
+                total = "";
+                while ((line = reader.readLine()) != null) {
+                    total += line;
+                }
+
+                long endTime = System.currentTimeMillis();
+                System.out.println("end Time: " + formatter.format(endTime));
+                this.elapsedTime += endTime - startTime;
+                System.out.println(elapsedTime);
+                System.out.println("result: " + total.length());
+            } catch (ClientProtocolException e) {
+                System.out.println("error1");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                System.out.println("error2");
+            }
+            SystemClock.sleep(100);
         }
+        System.out.println("Average time: " + elapsedTime /30);
+        */
+
+        for(int i = 0; i < 100; ++i){
+            HttpClient httpclient = new DefaultHttpClient();
+            //URi uri = new URI("http://149.125.82.188/files/file_500K_1");
+            // Prepare a request object
+            HttpGet httpget = new HttpGet("http://149.125.82.188/files/file_5K_1");
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                long startTime = System.currentTimeMillis();
+                HttpResponse response = httpclient.execute(httpget);
+                if (response == null) {
+                    System.out.println("response null");
+                    return false;
+                }
+
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(
+                                response.getEntity().getContent()
+                        )
+                );
+                long beforeRead = System.currentTimeMillis();
+                System.out.println("read Start: " + formatter.format(beforeRead));
+                String line;
+                total = "";
+                while ((line = reader.readLine()) != null) {
+                    total += line;
+                }
+
+                long endTime = System.currentTimeMillis();
+                System.out.println("end Time: " + formatter.format(endTime));
+                this.elapsedTime += endTime - startTime;
+                System.out.println(elapsedTime);
+                System.out.println("result: " + total.length());
+
+            }catch(Exception e){
+                System.out.println("Exception");
+            }
+            SystemClock.sleep(100);
+        }
+        System.out.println("Average time: " + elapsedTime /100);
         return false;
 
     }
@@ -232,9 +282,9 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         //tv.append("Elapsed Time: " + String.valueOf(this.elapsedTime) + "\n");
-        Intent myWebViewIntent = new Intent(this.context, WebViewActivity.class);
-        myWebViewIntent.putExtra("htmlString", this.total);
-        context.startActivity(myWebViewIntent);
+       // Intent myWebViewIntent = new Intent(this.context, WebViewActivity.class);
+        //myWebViewIntent.putExtra("htmlString", this.total);
+        //context.startActivity(myWebViewIntent);
     }
 
     public HttpClient getNewHttpClient() {
