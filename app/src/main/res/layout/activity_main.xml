@@ -10,11 +10,53 @@
         android:scrollbars = "vertical"
         android:orientation="vertical">
     <Button
-        android:text="start Service"
+        android:text="Download 5K"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="test_elaspedTime"
+        android:onClick="test_elaspedTime5"
         />
+        <Button
+            android:text="Download 10K"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime10"
+            />
+        <Button
+            android:text="Download 50K"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime50"
+            />
+        <Button
+            android:text="Download 100K"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime100"
+            />
+        <Button
+            android:text="Download 500K"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime500"
+            />
+        <Button
+            android:text="Download 1M"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime1000"
+            />
+        <Button
+            android:text="Download 3M"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test_elaspedTime3000"
+            /> <Button
+        android:text="Download 5M"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="test_elaspedTime5000"
+        />
+
     </LinearLayout>
         <TextView
             android:id="@+id/myTextView"

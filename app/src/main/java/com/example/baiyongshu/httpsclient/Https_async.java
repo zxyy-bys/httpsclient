@@ -39,9 +39,12 @@ import java.io.EOFException;
 import java.io.IOException;
 
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.HttpCookie;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -51,27 +54,36 @@ import java.text.SimpleDateFormat;
 //import org.apache.http.impl.client.HttpClients;
 //import org.apache.http.impl.client.HttpClientBuilder;
 
+
 /**
  * Created by baiyongshu on 9/1/15.
  */
+
 public class Https_async extends AsyncTask<Void, Long, Boolean> {
   //  private Exception exception;
-
     public long elapsedTime;
     TextView tv;
+
     Context context;
     String total;
+    Socket client;
     /*
     public Https_async(){
 
     }
     */
 
-    public Https_async(Context context,TextView tv){
-        this.tv = tv;
-        this.context = context;
-    }
+    int filesize;
 
+    public Https_async(Context context,int filesize){
+        this.context = context;
+        this.filesize = filesize;
+    }
+    public Https_async(Context context, Socket client,int filesize){
+        this.client = client;
+        this.context = context;
+        this.filesize = filesize;
+    }
     @Override
     protected Boolean doInBackground(Void... params) {
 /*
@@ -235,12 +247,42 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
         }
         System.out.println("Average time: " + elapsedTime /30);
         */
+        doTask();
 
-        for(int i = 0; i < 100; ++i){
+        if(this.client != null) {
+
+        }
+        return false;
+    }
+
+    private boolean doTask(){
+        SystemClock.sleep(300);
+        for(int i = 0; i < 20; ++i){
             HttpClient httpclient = new DefaultHttpClient();
             //URi uri = new URI("http://149.125.82.188/files/file_500K_1");
             // Prepare a request object
-            HttpGet httpget = new HttpGet("http://149.125.82.188/files/file_5K_1");
+
+            HttpGet httpget = null;
+            System.out.println("https_async start" + filesize);
+            if(filesize == 5)
+                httpget = new HttpGet("http://149.125.82.188/files/file_5K_1");
+            else if(filesize == 10)
+                httpget = new HttpGet("http://149.125.82.188/files/file_10K_1");
+            else if(filesize == 50)
+                httpget = new HttpGet("http://149.125.82.188/files/file_50K_1");
+            else if(filesize == 100)
+                httpget = new HttpGet("http://149.125.82.188/files/file_100K_1");
+            else if(filesize == 500)
+                httpget = new HttpGet("http://149.125.82.188/files/file_500K_1");
+            else if(filesize == 1000)
+                httpget = new HttpGet("http://149.125.82.188/files/file_1M_1");
+            else if(filesize == 3000)
+                httpget = new HttpGet("http://149.125.82.188/files/file_3M_1");
+            else if(filesize == 5000)
+                httpget = new HttpGet("http://149.125.82.188/files/file_5M_1");
+            else
+                System.exit(0);
+
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
                 long startTime = System.currentTimeMillis();
@@ -255,6 +297,7 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                                 response.getEntity().getContent()
                         )
                 );
+
                 long beforeRead = System.currentTimeMillis();
                 System.out.println("read Start: " + formatter.format(beforeRead));
                 String line;
@@ -270,15 +313,14 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                 System.out.println("result: " + total.length());
 
             }catch(Exception e){
+                e.printStackTrace();
                 System.out.println("Exception");
             }
-            SystemClock.sleep(100);
+            SystemClock.sleep(200);
         }
-        System.out.println("Average time: " + elapsedTime /100);
+        System.out.println("Average time: " + elapsedTime /20);
         return false;
-
     }
-
     @Override
     protected void onPostExecute(Boolean result) {
         //tv.append("Elapsed Time: " + String.valueOf(this.elapsedTime) + "\n");

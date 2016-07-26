@@ -21,8 +21,12 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.myTextView);
         tv.setMovementMethod(new ScrollingMovementMethod());
-        Https_async https =  new Https_async(this,tv);
-        https.execute();
+        //Https_async https =  new Https_async(this,tv,5);
+        //https.execute();
+
+        Intent intent = new Intent(this, downloadService.class);
+        startService(intent);
+        System.out.println("After Start Service");
     }
 
     @Override
@@ -47,8 +51,50 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void test_elaspedTime(View view){
-        Https_async https =  new Https_async(this,tv);
+    public void test_elaspedTime5(View view){
+        Https_async https =  new Https_async(this,5);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime10(View view){
+        Https_async https =  new Https_async(this,10);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime50(View view){
+        Https_async https =  new Https_async(this,50);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime100(View view){
+        Https_async https =  new Https_async(this,100);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime500(View view){
+        Https_async https =  new Https_async(this,500);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime1000(View view){
+        Https_async https =  new Https_async(this,1000);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime3000(View view){
+        Https_async https =  new Https_async(this,3000);
+        https.execute();
+        //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
+
+    }
+    public void test_elaspedTime5000(View view){
+        Https_async https =  new Https_async(this,5000);
         https.execute();
         //System.out.println("Elapsed Time: " + String.valueOf(https.elapsedTime));
 
