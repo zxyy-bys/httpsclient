@@ -5,5 +5,6 @@ package com.example.baiyongshu.httpsclient;
  */
 
 public enum TestTypeEnum {
-    HTTPDOWNLOAD,HTTPUPLOAD,HTTPSDOWNLOAD,HTTPSUPLOAD
+    HTTPDOWNLOAD,HTTPUPLOAD,HTTPSDOWNLOAD,HTTPSUPLOAD;
+
 }

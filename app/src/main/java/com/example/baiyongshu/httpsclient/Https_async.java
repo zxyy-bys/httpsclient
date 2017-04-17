@@ -71,6 +71,7 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
     int serverResponseCode;
     File mylog;
     final int ROUNDTIME = 10;
+    final int times = 6;
 
     TestTypeEnum type;
     /*
@@ -96,27 +97,35 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
     protected Boolean doInBackground(Void... params) {
 
       //  mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead"+ "/overheadResult.log");
-        long curtime = System.currentTimeMillis();
-        switch(type){
-            case HTTPDOWNLOAD:
-                mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/io_overhead"+ "/HttpDownload_" + curtime + ".log");
-                doTask();
-                break;
-            case HTTPSDOWNLOAD:
-                mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/io_overhead"+ "/HttpsDownload_" + curtime + ".log");
-                doTask();
-                break;
-            case HTTPUPLOAD:
-                mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/io_overhead"+ "/HttpUpload_" + curtime + ".log");
-                uploadFile();
-                break;
-            case HTTPSUPLOAD:
-                mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/io_overhead"+ "/HttpsUpload_" + curtime + ".log");
-                System.out.println("upload file");
-                uploadFile();
-                break;
 
-        }
+        //for(TestTypeEnum state : TestTypeEnum.values()){
+        //     this.type = state;
+        //    if(this.type == TestTypeEnum.HTTPDOWNLOAD || this.type == TestTypeEnum.HTTPUPLOAD){
+         //       continue;
+         //   }
+            SystemClock.sleep(1000);
+            long curtime = System.currentTimeMillis();
+            switch (type) {
+                case HTTPDOWNLOAD:
+                    mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/cpu" + "/HttpDownload_" + curtime + ".log");
+                    doTask();
+                    break;
+                case HTTPSDOWNLOAD:
+                    mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/cpu" + "/HttpsDownload_" + curtime + ".log");
+                    doTask();
+                    break;
+                case HTTPUPLOAD:
+                    mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/cpu" + "/HttpUpload_" + curtime + ".log");
+                    uploadFile();
+                    break;
+                case HTTPSUPLOAD:
+                    mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overhead/cpu" + "/HttpsUpload_" + curtime + ".log");
+                    System.out.println("upload file");
+                    uploadFile();
+                    break;
+
+            }
+        //}
 
     /*\\    mylog = new File(Environment.getExternalStorageDirectory().getPath() + "/overheadResult.log");
         //doTask;
@@ -166,9 +175,11 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
 
 
         double[] avg  = new double[10];
-        final int times = 7;
+
         String http_head = null;
-        String host = "149.125.80.173";
+        //String host = "149.125.80.173";
+        String host = "10.42.0.111";
+
         switch(type){
             case HTTPDOWNLOAD:
                 http_head = "http";
@@ -178,10 +189,11 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
         }
 
         writeToLog("------------------------ "+  http_head + "Dowland File start: ----------------------");
-        for(int j = 0; j < times; j ++ ) {
+
+        for(int j = 5; j < times; j ++ ) {
             long one_elapsed = 0;
             long total_elapsed = 0;
-                SystemClock.sleep(1000);
+                SystemClock.sleep(5000);
                 for (int i = 0; i < ROUNDTIME; ++i) {
                     //HttpClient httpclient = new DefaultHttpClient();
                     //URi uri = new URI("http://149.125.81.252/files/file_500K_1");
@@ -223,6 +235,8 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                         System.exit(0);
 
                     url = new URL(http_head + "://" + host + remote_file_path);
+                    //url = new URL("https://www.google.com");
+
                     SSLContext sslcontext = SSLContext.getInstance("TLSv1");
 
                     sslcontext.init(null,
@@ -243,10 +257,19 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                     byte[] array = new byte[1024];
 
                     int current;
-                    while((current = bufferinstream.read(array,0,1024)) != -1){
+                    int recv_size = 0;
+//                    do {
+//                        recv_size = bufferinstream.available();
+//                        System.out.println("bufferinstream length" + recv_size);
+//                    }while(recv_size < 1024 * 1024 * 1);
+                    //while((current = bufferinstream.read(array,0,1024)) != -1){
                         //do nothing
                         //String str = new String(array, "UTF-8");
                         //System.out.println(str);
+                    //}
+                    int respoceCode = 0;
+                    if((respoceCode = uconn.getResponseCode()) != 0){
+                        System.out.println("Download Response Code: \n" + respoceCode);
                     }
 
                     //download file down
@@ -275,7 +298,7 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
 //                        uconn.disconnect();
                     }
                 }
-                SystemClock.sleep(1000);
+                SystemClock.sleep(2000);
             }
             //
             writeToLog("Average time: " + total_elapsed / ROUNDTIME);
@@ -294,9 +317,9 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
     public int uploadFile() {
      //   final int ROUNDTIME = 5;
         double[] avg  = new double[10];
-        final int times = 7;
         String http_head = null;
-        String host = "149.125.80.173";
+        //String host = "149.125.80.173";
+        String host = "10.42.0.111";
         switch(type){
             case HTTPUPLOAD:
                 http_head = "http";
@@ -306,10 +329,10 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
         }
         String fileDir = Environment.getExternalStorageDirectory().getPath() ;
 
-        for(int j = 0; j < times; j ++ ) {
+        for(int j = 1; j < times; j ++ ) {
             long one_elapsed = 0;
             long total_elapsed = 0;
-            SystemClock.sleep(1000);
+            SystemClock.sleep(5000);
             String filename = null;
             for (int i = 0; i < ROUNDTIME; ++i) {
                 if (j == 0) {
@@ -357,7 +380,7 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                 } else {
                     try {
                         FileInputStream fileInputStream = new FileInputStream(sourceFile);
-                        URL url = new URL(http_head + "://149.125.80.173/upload.php");
+                        URL url = new URL(http_head + "://"+host+"/upload.php");
                         disableSSLCertificateChecking();
 
                         long startTime = System.currentTimeMillis();
@@ -447,7 +470,7 @@ public class Https_async extends AsyncTask<Void, Long, Boolean> {
                         }
                     }
                 }
-                SystemClock.sleep(1000);
+                SystemClock.sleep(2000);
             }
             writeToLog("Average time: " + total_elapsed / ROUNDTIME);
             //System.out.println("Average time: " + total_elapsed / ROUNDTIME);
